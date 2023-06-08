@@ -1,0 +1,44 @@
+breed [suns sun]
+breed [planets planet]
+
+turtles-own [mass radius init-vel temp]
+
+globals [g-constant]
+
+to setup
+  clear-all
+  set-default-shape turtles "arrow"
+  create-suns 1 [
+    set size 3
+    set color yellow
+    set mass 10
+    set radius 5
+    set init-vel 0
+  ] 
+  
+  create-planets 1 [
+    set size 1
+    set color blue
+    set mass 5
+    set radius 2.5
+    set init-vel 1
+    ;setxy (-10 + random 25) (-10 + random 25)
+    ;while [abs xcor < 2 or abs ycor < 2][setxy (-2 + random 25) (-2 + random 25)]
+    setxy 5 5
+    set heading (atan xcor ycor) - 90
+    pendown
+  ]
+  
+  set g-constant 6.6743E-11
+  
+  reset-ticks
+end
+
+to go
+  ask planets[
+    set heading (atan xcor ycor) - 90
+    forward init-vel + (0.5 * ((g-constant * 10) / (([distance one-of suns] of one-of planets) ^ 2)))
+    
+]
+  tick
+end
